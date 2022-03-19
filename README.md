@@ -1,4 +1,4 @@
-# TC: API DE TIPO DE CAMBIO
+# TC-API: API DE TIPO DE CAMBIO
 
 ## Crear un entorno virtual
 
@@ -8,7 +8,7 @@
 ## Paquetes
 
 - $ pip install Flask
-
+- $ pip install pyodbc‑4.0.32‑cp310‑cp310‑win_amd64.whl (https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyodbc)
 
 ## Ejecutar
 
