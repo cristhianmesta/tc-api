@@ -1,7 +1,7 @@
 import pyodbc
 
 class SqlServer:
-
+    
     def __init__(self, cnn_str):
         self.connection = pyodbc.connect(cnn_str)
         self.cursor = self.connection.cursor()
