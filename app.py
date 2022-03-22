@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, url_for
 from markupsafe import escape
 import datetime
 
-from exchangeRate import getExchangeRateByDay, getExchangeRateGreaterThan
+from Features.exchangeRate import getExchangeRateByDay, getExchangeRateGreaterThan
 from flask_cors import CORS
 
 app = Flask(__name__)
