@@ -4,8 +4,11 @@ from markupsafe import escape
 import datetime
 
 from exchangeRate import getExchangeRateByDay, getExchangeRateGreaterThan
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app)
+
 
 @app.route("/")
 def index():
@@ -37,13 +40,3 @@ def exchangeRate_geatherThan():
     except ValueError:
         return "Se admiten solo fecha para el parámetro moment", 400
         
-
-# @app.route('/projects/')
-# def projects():
-#     return 'The project page --> RUTA: ' + url_for('hello', name='John Doe')
-
-
-# with app.test_request_context():
-#     print(url_for('index'))
-#     print(url_for('projects'))
-#     print(url_for('hello', name='John Doe'))
