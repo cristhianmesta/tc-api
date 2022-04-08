@@ -13,3 +13,4 @@ def getExchangeRateGreaterThan(moment):
     query = "SELECT * FROM TIPO_CAMBIO_KAMBISTA WHERE Fecha > CONVERT(datetime,?) AND FORMAT(Fecha, 'yyyy-MM-dd') = FORMAT(CONVERT(datetime,?), 'yyyy-MM-dd')"
     params = (moment, moment)
     return db.select(query, params)
+    

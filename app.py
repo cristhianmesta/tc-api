@@ -1,6 +1,4 @@
-from ast import arg
-from flask import Flask, jsonify, request, url_for
-from markupsafe import escape
+from flask import Flask, jsonify, request
 import datetime
 
 from Features.exchangeRate import getExchangeRateByDay, getExchangeRateGreaterThan
@@ -8,7 +6,6 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 cors = CORS(app)
-
 
 @app.route("/")
 def index():
@@ -18,7 +15,7 @@ def index():
 def exchangeRate(day):
     results = getExchangeRateByDay(day)
     results_dict = [{
-        'fecha' : result[1],
+        'fecha' : result[1].strftime("%Y-%m-%d %H:%M:%S.%f"),
         'pc'    : result[2],
         'pv'    : result[3],
     }for result in results]
@@ -32,7 +29,7 @@ def exchangeRate_geatherThan():
     try:
         results = getExchangeRateGreaterThan(moment)
         results_dict = [{
-            'fecha' : result[1],
+            'fecha' : result[1].strftime("%Y-%m-%d %H:%M:%S.%f"),
             'pc'    : result[2],
             'pv'    : result[3],
         }for result in results]
