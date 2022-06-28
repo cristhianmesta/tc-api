@@ -1,10 +1,14 @@
 from flask import Flask, jsonify, request
-import datetime
+from datetime import datetime
+from pytz import timezone
 import pandas as pd
 import Utils.calendar as calendar
 
 from Features.exchangeRate import getExchangeRateByDay, getExchangeRateByMonth, getExchangeRateGreaterThan
 from flask_cors import CORS
+
+SERVICES = ("KAMBISTA", "REXTIE", "TKAMBIO")
+tz = timezone('US/Pacific')
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -15,21 +19,38 @@ def index():
 
 @app.route("/exchange-rate/<day>")
 def exchangeRate(day):
-    results = getExchangeRateByDay(day)
+    service = request.args.get('service') 
+    
+    if service == None :
+        return "No existen valores para el servicio indicado", 400
+
+    if not (service.upper() in str(SERVICES)):
+        return "No existen valores para el servicio indicado", 400
+
+    results = getExchangeRateByDay('TIPO_CAMBIO_'+service.upper(), day)
     results_dict = [{
-        'fecha' : result[1].strftime("%Y-%m-%d %H:%M:%S.%f"),
+        'fecha' : result[1].astimezone(tz),
         'pc'    : result[2],
         'pv'    : result[3],
     }for result in results]
+            # 'fecha' : result[1].strftime("%Y-%m-%d %H:%M:%S.%f"),
     return jsonify(results_dict)
 
 @app.route("/exchange-rate/geather-than", methods=['GET'])
 def exchangeRate_geatherThan():
+    service = request.args.get('service') 
+    
+    if service == None :
+        return "No existen valores para el servicio indicado", 400
+
+    if not (service.upper() in str(SERVICES)):
+        return "No existen valores para el servicio indicado", 400
+
     moment = request.args.get("moment")
     if(moment == '' or moment==None) : moment = datetime.datetime.now()
 
     try:
-        results = getExchangeRateGreaterThan(moment)
+        results = getExchangeRateGreaterThan('TIPO_CAMBIO_'+service.upper(),moment)
         results_dict = [{
             'fecha' : result[1].strftime("%Y-%m-%d %H:%M:%S.%f"),
             'pc'    : result[2],
@@ -41,9 +62,17 @@ def exchangeRate_geatherThan():
 
 @app.route("/mins-by-month/<month>")
 def minsByMonth(month):
+    service = request.args.get('service') 
+    
+    if service == None :
+        return "No existen valores para el servicio indicado", 400
+
+    if not (service.upper() in str(SERVICES)):
+        return "No existen valores para el servicio indicado", 400
+
     monthNumber, yearNumer = list(month.split("-"))
     daysNumber = calendar.numeberOfDays(int(monthNumber), int(yearNumer))
-    results = getExchangeRateByMonth(monthNumber,yearNumer)
+    results = getExchangeRateByMonth('TIPO_CAMBIO_'+service.upper(),monthNumber,yearNumer)
     month_dict = [{
         'day'   : int(result[0].strftime("%d")),
         'month' : int(result[0].strftime("%m")),
